@@ -1,4 +1,9 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Inject,
+  Injectable,
+  Logger,
+} from '@nestjs/common';
 import { RegisterUserDto } from './dto/create-user-dto';
 import { User } from './entities/user.entity';
 import { DbService } from 'src/db/db.service';
@@ -6,8 +11,9 @@ import { LoginUserDto } from './dto/login-user-dto';
 
 @Injectable()
 export class UserService {
-  @Inject(DbService)
-  dbService: DbService;
+  private readonly logger = new Logger(UserService.name);
+
+  constructor(private readonly dbService: DbService) {}
 
   async login(loginUserDto: LoginUserDto) {
     const users: User[] = await this.dbService.read();
